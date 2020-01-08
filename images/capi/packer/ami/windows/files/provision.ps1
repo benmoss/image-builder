@@ -22,3 +22,8 @@ New-Service -Name "kubelet" -StartupType Automatic -DependsOn "docker" -BinaryPa
 curl.exe -Lo cloudbase-init.zip https://github.com/gab-satchi/cloudbase-init-installer-1/suites/353871458/artifacts/654819
 tar -xf .\cloudbase-init.zip --strip=1
 Start-Process -Wait -PassThru -FilePath "msiexec.exe" -ArgumentList "/i C:\Users\Administrator\CloudbaseInitSetup.msi /qn /L*v C:\log.txt"
+
+curl.exe -LO https://downloadmirror.intel.com/28396/eng/PROWinx64.exe
+mkdir $env:TMP\driver
+tar -xf .\PROWinx64.exe -C $env:TMP\driver
+& $env:TMP\driver\APPS\PROSETDX\Winx64\DxSetup.exe /qn
