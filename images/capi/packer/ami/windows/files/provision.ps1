@@ -28,3 +28,5 @@ curl.exe -LO https://downloadmirror.intel.com/28396/eng/PROWinx64.exe
 mkdir $env:TMP\driver
 tar -xf .\PROWinx64.exe -C $env:TMP\driver
 & $env:TMP\driver\APPS\PROSETDX\Winx64\DxSetup.exe /qn
+
+New-NetFirewallRule -Name kubelet -DisplayName 'kubelet' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 10250
