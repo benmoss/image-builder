@@ -22,7 +22,7 @@
   "builders": [{
     "name": "windows-2019",
     "type": "amazon-ebs",
-    "instance_type": "t2.small",
+    "instance_type": "c3.large",
     "user_data_file": "files/configure-source-ssh.ps1",
     "associate_public_ip_address": true,
     "source_ami": "{{user `windows_2019_ami`}}",
@@ -47,10 +47,9 @@
     "region": "{{ user `aws_region` }}",
     "secret_key": "{{user `aws_secret_key`}}",
     "iam_instance_profile": "{{user `iam_instance_profile`}}",
-    "user_data_file": "user-data.xml",
     "communicator": "ssh",
     "ssh_username": "Administrator",
-    "ssh_timeout": "5m",
+    "ssh_timeout": "20m",
     "vpc_id": "{{ user `vpc_id` }}",
     "subnet_id": "{{ user `subnet_id` }}",
     "tags": {

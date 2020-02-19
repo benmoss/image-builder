@@ -18,15 +18,10 @@ mkdir -force /etc/kubernetes/pki
 New-Item -path C:\var\lib\kubelet\etc\kubernetes\pki -type SymbolicLink -value C:\etc\kubernetes\pki\
 
 $kubeletBinPath=$(where.exe kubelet)
-New-Service -Name "kubelet" -StartupType Automatic -DependsOn "docker" -BinaryPathName "$kubeletBinPath --windows-service --cert-dir=$env:SYSTEMDRIVE\var\lib\kubelet\pki --config=/var/lib/kubelet/config.yaml --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --pod-infra-container-image=`"mcr.microsoft.com/k8s/core/pause:1.2.0`" --enable-debugging-handlers  --cgroups-per-qos=false --enforce-node-allocatable=`"`" --network-plugin=cni --resolv-conf=`"`" --log-dir=/var/log/kubelet --logtostderr=false --image-pull-progress-deadline=20m --cloud-provider=aws"
+New-Service -Name "kubelet" -StartupType Automatic -DependsOn "docker" -BinaryPathName "$kubeletBinPath --windows-service --cert-dir=$env:SYSTEMDRIVE\var\lib\kubelet\pki --config=/var/lib/kubelet/config.yaml --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --pod-infra-container-image=`"mcr.microsoft.com/k8s/core/pause:1.2.0`" --enable-debugging-handlers  --cgroups-per-qos=false --enforce-node-allocatable=`"`" --network-plugin=cni --resolv-conf=`"`" --log-dir=/var/log/kubelet --logtostderr=false --image-pull-progress-deadline=20m --cloud-provider=aws --feature-gates CSIMigration=false"
 
-curl.exe -Lo cloudbase-init.zip https://github.com/gab-satchi/cloudbase-init-installer-1/suites/353871458/artifacts/654819
-tar -xf .\cloudbase-init.zip --strip=1
+curl.exe -Lo cloudbase-init.zip https://storage.googleapis.com/pks-windows-misc/cloudbase-init.zip
+tar -xf .\cloudbase-init.zip
 Start-Process -Wait -PassThru -FilePath "msiexec.exe" -ArgumentList "/i C:\Users\Administrator\CloudbaseInitSetup.msi /qn /L*v C:\log.txt"
-
-curl.exe -LO https://downloadmirror.intel.com/28396/eng/PROWinx64.exe
-mkdir $env:TMP\driver
-tar -xf .\PROWinx64.exe -C $env:TMP\driver
-& $env:TMP\driver\APPS\PROSETDX\Winx64\DxSetup.exe /qn
 
 New-NetFirewallRule -Name kubelet -DisplayName 'kubelet' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 10250
